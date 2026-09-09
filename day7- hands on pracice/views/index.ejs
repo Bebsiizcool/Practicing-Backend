@@ -16,7 +16,7 @@
                     placeholder="Title goes here">
                 <textarea name="yellow" class=" w-full block mt-2 px-5 py-2 bg-zinc-700 rounded-md resize-none outline-none"
                     placeholder="Write your Task Details"></textarea>
-                <input class="mt-2 bg-blue-600 px-5 py-2 rounded-md" type="submit" value="Create Task">
+                <input class="cursor-pointer mt-2 bg-blue-600 px-5 py-2 rounded-md" type="submit" value="Create Task">
             </form>
         </div>
 
@@ -28,7 +28,12 @@
 
                     <div class="  task min-w-72 px-3 py-4 bg-zinc-700 rounded-md">
                         <h1 class="text-white text-2xl tracking-tighter"><%= val %></h1>
-                        <a class="text-blue-500 inline-block mt-3" href="/file/<%= val %>">Read More</a>
+
+                        <div class="flex w-full justify-between items-center mt-3">
+                            <a class="text-blue-500 inline-block " href="/file/<%= val %>">Read More</a>
+                            <a class="text-zinc-300" href="/edit/<%= val %>">Edit</a>
+                        </div>
+
                     </div>
 
                     <% }) %>
