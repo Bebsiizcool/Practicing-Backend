@@ -21,7 +21,7 @@ app.get("/read", (req, res)=>{
 });
 })
 
-// to decrypt 
+// to decrypt/compare
 app.get("/relt", (req, res)=>{
     bcrypt.compare("bebsi", "$2b$10$DnX7GOv8xj46wMRE/i9rxuJ2e/C6O.UWxxKcZ8E1XWYz1sBqyCkHO", function(err, result) {
     console.log(result)
