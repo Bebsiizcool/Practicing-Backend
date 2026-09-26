@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini-Project</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body >
+    <div class="h-screen w-full bg-zinc-900 text-white p-10 ">
+    <a class="px-6 py-2 bg-red-800" href="/logout"> Logout</a>
+    <div class="flex flex-col items-center" >
+        <h3 class="text-4xl mb-2 mt-40">Hello, <%= user.name%></h3>
+        <h3 class="mb-5 text-xl">Create Your Post</h3>
+        <form action="/post" method="POST">
+            <textarea placeholder="Whats on your mind?" class="p-3 outline-none resize-none bg-transparent border-2 border-zinc-800 rounded-md w-130 " name="content"></textarea>
+            <input class="px-3 py-1 block bg-yellow-600 cursor-pointer w-130 mt-2 rounded-md" type="submit" value="Create Post">
+        </form>
+
+        <div class="post mt-20 ">
+            <span class="text-xl text-zinc-400">Your Posts</span>
+            <div class=" container mt-5 flex gap-4 ">
+
+                <% user.posts.reverse().forEach(function(post){%>
+
+                    <div class="w-full p-5 border-2 border-zinc-700 bg-zinc-800">
+                    <h3 class="bg-zinc-700 inline px-3 py-1">@<%= user.username%></h3>
+                    <p class="mt-2"><%= post.content%></p>
+                    <div class="btns flex gap-2 mt-4 ">
+                        <a class="px-6 py-1 bg-blue-700" href=""> Like</a>
+                        <a class="px-6 py-1 bg-yellow-700" href=""> Edit</a>
+                        <a class="px-6 py-1 bg-zinc-500" href=""> Delete</a>
+                    </div>
+                </div>
+
+                <%}) %>
+
+                
+
+                
+                
+        </div>
+    </div>
+    </div>
+</body>
+</html>

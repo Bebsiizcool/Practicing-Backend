@@ -15,7 +15,7 @@ app.use(cookieParser())
 
 
 app.get("/",(req, res)=>{
-    res.render("index")
+    res.render("register")
 })
 
 app.get("/login",(req, res)=>{
@@ -53,7 +53,7 @@ app.post("/login", async(req, res)=>{
         if(result){ 
             let token = jwt.sign({email, userid: user._id}, "shhhh")
             res.cookie("token", token)
-            res.status(200).send("you are logged in!")
+            res.status(200).redirect("profile")
     }
         else res.redirect("/login")
     })
@@ -65,8 +65,26 @@ app.get("/logout",(req, res)=>{
     res.redirect("login")
 })
 
+app.get("/profile", isloggedin, async(req, res)=>{
+    let user = await userData.findOne({email: req.user.email}).populate("posts")
+     
+    res.render("profile", {user})
+})
+
+app.post("/post", isloggedin, async(req, res)=>{
+    let { content } = req.body
+    let user = await userData.findOne({email: req.user.email})
+    let post = await postData.create({
+        user: user._id,
+        content    
+    })
+    user.posts.push(post._id)
+    await user.save()
+    res.redirect("/profile")
+})
+
 function isloggedin(req, res, next){
-    if(req.cookies.token === "") res.send("you must be loggedin")
+    if(req.cookies.token === "") res.redirect("login")
         else{
             let data = jwt.verify(req.cookies.token, "shhhh")
             req.user = data
