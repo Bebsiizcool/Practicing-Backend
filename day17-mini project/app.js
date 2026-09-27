@@ -72,16 +72,45 @@ app.get("/profile", isloggedin, async(req, res)=>{
 })
 
 app.post("/post", isloggedin, async(req, res)=>{
-    let { content } = req.body
+    // let { content } = req.body
     let user = await userData.findOne({email: req.user.email})
     let post = await postData.create({
         user: user._id,
-        content    
+        content: req.body.content  
     })
     user.posts.push(post._id)
     await user.save()
     res.redirect("/profile")
 })
+
+app.get("/like/:id", isloggedin, async(req, res)=>{
+    let post = await postData.findOne({_id: req.params.id}).populate("user")
+
+    if(post.likes.indexOf(req.user.userid) === -1){
+        post.likes.push(req.user.userid)
+    }
+    else{
+        post.likes.splice(post.likes.indexOf(req.user.userid), 1)
+    }
+    await post.save()
+    res.redirect("/profile")
+})
+
+app.get("/edit/:id", isloggedin, async(req, res)=>{
+    let post = await postData.findOne({_id: req.params.id}).populate("user")    
+    res.render("edit", {post})
+})
+
+app.post("/update/:id", isloggedin, async(req, res)=>{
+    let post = await postData.findOneAndUpdate({_id: req.params.id}, {content: req.body.content}) 
+    res.redirect("/profile")
+})
+
+app.get("/delete/:id", isloggedin, async(req, res)=>{
+    let post = await postData.findOneAndDelete({_id: req.params.id})  
+    res.redirect("/profile")
+})
+
 
 function isloggedin(req, res, next){
     if(req.cookies.token === "") res.redirect("login")
